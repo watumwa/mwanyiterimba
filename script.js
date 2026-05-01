@@ -331,13 +331,26 @@ if (outletsBody && Array.isArray(window.OUTLETS_DATA)) {
     } else {
       visibleRows.forEach((row) => {
         const tableRow = document.createElement("tr");
-        const phone = row.contact ? row.contact : "-";
+
+        const intl = row.contact ? "256" + row.contact.replace(/^0/, "") : "";
+        const contactCell = row.contact
+          ? `<div class="outlet-contact">
+               <a class="outlet-call" href="tel:+${intl}" aria-label="Call ${row.name}">
+                 <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 3.5A1.5 1.5 0 0 1 4.5 2h1.88a1 1 0 0 1 .97.757l.7 2.8a1 1 0 0 1-.287.985L6.53 7.77a11.05 11.05 0 0 0 5.7 5.7l1.228-1.23a1 1 0 0 1 .985-.288l2.8.7A1 1 0 0 1 18 13.62V15.5A1.5 1.5 0 0 1 16.5 17C8.492 17 2 10.508 2 3.5A1.5 1.5 0 0 1 3 3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                 ${row.contact}
+               </a>
+               <a class="outlet-whatsapp" href="https://wa.me/${intl}" target="_blank" rel="noreferrer" aria-label="WhatsApp ${row.name}">
+                 <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a8 8 0 0 1 6.77 12.24l.87 2.64-2.72-.86A8 8 0 1 1 10 2Zm-1.92 4.1c-.14 0-.3.04-.44.2-.15.16-.57.55-.57 1.34s.58 1.55.66 1.66c.08.1 1.13 1.72 2.74 2.41.57.24 1.02.39 1.37.51.57.18 1.09.15 1.5.09.46-.07 1.41-.57 1.61-1.13.2-.55.2-1.03.14-1.13-.06-.1-.21-.16-.45-.28-.24-.12-1.41-.69-1.63-.77-.21-.08-.37-.12-.52.12-.16.24-.61.77-.75.93-.14.16-.27.18-.51.06-.24-.12-1.02-.37-1.95-1.2-.72-.64-1.2-1.43-1.35-1.67-.14-.24 0-.37.11-.49.1-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.52-1.27-.72-1.74-.19-.45-.39-.39-.52-.4h-.45Z"/></svg>
+                 WhatsApp
+               </a>
+             </div>`
+          : '<span class="outlet-no-contact">—</span>';
 
         tableRow.innerHTML = `
           <td>${row.id}</td>
           <td>${row.name}</td>
           <td>${row.location}</td>
-          <td>${phone}</td>
+          <td>${contactCell}</td>
         `;
 
         outletsBody.appendChild(tableRow);
@@ -365,4 +378,245 @@ if (outletsBody && Array.isArray(window.OUTLETS_DATA)) {
   });
 
   renderOutlets();
+}
+
+// ── Shop page ────────────────────────────────────────────────
+
+if (document.querySelector(".shop-product-grid")) {
+  const cart = []; // { id, name, size, price, qty }
+
+  const fmtPrice = (n) => "UGX " + n.toLocaleString("en-UG");
+
+  // Size button selection per card
+  document.querySelectorAll(".shop-card").forEach((card) => {
+    const sizeBtns = card.querySelectorAll(".size-btn");
+    const priceEl = card.querySelector(".shop-price");
+
+    sizeBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        sizeBtns.forEach((b) => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        card.dataset.productPrice = btn.dataset.price;
+        card.dataset.productName =
+          card.querySelector("h3").textContent.trim() + " " + btn.dataset.size;
+        if (priceEl) priceEl.textContent = fmtPrice(Number(btn.dataset.price));
+      });
+    });
+
+    card.querySelector(".add-to-cart").addEventListener("click", () => {
+      const activeBtn = card.querySelector(".size-btn.is-active");
+      const id = card.dataset.productId + "-" + activeBtn.dataset.size;
+      const name = card.querySelector("h3").textContent.trim();
+      const size = activeBtn.dataset.size;
+      const price = Number(activeBtn.dataset.price);
+      const existing = cart.find((i) => i.id === id);
+      if (existing) { existing.qty += 1; } else { cart.push({ id, name, size, price, qty: 1 }); }
+      renderCart();
+      document.getElementById("cart").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  function renderCart() {
+    const itemsEl = document.getElementById("cart-items");
+    const countEl = document.getElementById("cart-count");
+    const totalRowEl = document.getElementById("cart-total-row");
+    const totalEl = document.getElementById("cart-total");
+
+    if (!itemsEl) return;
+
+    const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+    countEl.textContent = totalQty + (totalQty === 1 ? " item" : " items");
+
+    if (!cart.length) {
+      itemsEl.innerHTML = '<p class="cart-empty">Your cart is empty. Add a product above.</p>';
+      totalRowEl.hidden = true;
+      return;
+    }
+
+    itemsEl.innerHTML = cart
+      .map(
+        (item) => `
+      <div class="cart-item" data-cart-id="${item.id}">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-sub">${item.size} — ${fmtPrice(item.price)} each</div>
+        </div>
+        <div class="cart-item-qty">
+          <button type="button" class="qty-btn" data-action="dec" aria-label="Decrease quantity">−</button>
+          <span class="qty-value">${item.qty}</span>
+          <button type="button" class="qty-btn" data-action="inc" aria-label="Increase quantity">+</button>
+        </div>
+        <div class="cart-item-price">${fmtPrice(item.price * item.qty)}</div>
+        <button type="button" class="cart-remove" data-action="remove" aria-label="Remove ${item.name} from cart">✕</button>
+      </div>`
+      )
+      .join("");
+
+    // Qty / remove handlers
+    itemsEl.querySelectorAll(".cart-item").forEach((row) => {
+      const id = row.dataset.cartId;
+      row.querySelector("[data-action='inc']").addEventListener("click", () => {
+        const item = cart.find((i) => i.id === id);
+        if (item) item.qty += 1;
+        renderCart();
+      });
+      row.querySelector("[data-action='dec']").addEventListener("click", () => {
+        const item = cart.find((i) => i.id === id);
+        if (item) {
+          item.qty -= 1;
+          if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
+        }
+        renderCart();
+      });
+      row.querySelector("[data-action='remove']").addEventListener("click", () => {
+        const idx = cart.findIndex((i) => i.id === id);
+        if (idx > -1) cart.splice(idx, 1);
+        renderCart();
+      });
+    });
+
+    totalRowEl.hidden = false;
+    totalEl.textContent = fmtPrice(totalPrice);
+  }
+
+  // Order form
+  const orderForm = document.getElementById("order-form-el");
+
+  if (orderForm) {
+    const fields = {
+      name: document.getElementById("order-name"),
+      phone: document.getElementById("order-phone"),
+      location: document.getElementById("order-location"),
+    };
+
+    const validate = () => {
+      let valid = true;
+      Object.entries(fields).forEach(([key, input]) => {
+        const err = document.getElementById("error-" + key);
+        if (!input.value.trim()) {
+          input.classList.add("is-invalid");
+          if (err) err.textContent = "This field is required.";
+          valid = false;
+        } else {
+          input.classList.remove("is-invalid");
+          if (err) err.textContent = "";
+        }
+      });
+      return valid;
+    };
+
+    // Live clear errors
+    Object.values(fields).forEach((input) => {
+      input.addEventListener("input", () => {
+        input.classList.remove("is-invalid");
+        const err = document.getElementById("error-" + input.id.replace("order-", ""));
+        if (err) err.textContent = "";
+      });
+    });
+
+    // Payment method handling
+    const paymentRadios = orderForm.querySelectorAll("input[name='payment']");
+    const submitBtn = document.getElementById("submit-order");
+    const paymentNote = document.getElementById("payment-note");
+
+    const paymentConfig = {
+      whatsapp: {
+        label: "Place Order via WhatsApp",
+        note: "Your order will be sent to our sales team on WhatsApp. They will confirm and guide you on payment.",
+        disabled: false,
+      },
+      mtn: {
+        label: "Pay with MTN Mobile Money",
+        note: "MTN Mobile Money payments are coming soon. Please select WhatsApp to order now.",
+        disabled: true,
+      },
+      airtel: {
+        label: "Pay with Airtel Money",
+        note: "Airtel Money payments are coming soon. Please select WhatsApp to order now.",
+        disabled: true,
+      },
+    };
+
+    const applyPaymentState = (value) => {
+      const config = paymentConfig[value] || paymentConfig.whatsapp;
+      if (submitBtn) {
+        submitBtn.textContent = config.label;
+        submitBtn.disabled = config.disabled;
+        submitBtn.style.opacity = config.disabled ? "0.5" : "";
+        submitBtn.style.cursor = config.disabled ? "not-allowed" : "";
+      }
+      if (paymentNote) paymentNote.textContent = config.note;
+    };
+
+    paymentRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        const config = paymentConfig[radio.value];
+        if (config && config.disabled) {
+          // Snap back to whatsapp — coming soon options are not selectable
+          orderForm.querySelector("input[value='whatsapp']").checked = true;
+          applyPaymentState("whatsapp");
+          // Brief visual feedback on the card
+          const card = radio.nextElementSibling;
+          card.style.animation = "none";
+          card.classList.add("is-disabled");
+          setTimeout(() => card.classList.remove("is-disabled"), 1200);
+        } else {
+          applyPaymentState(radio.value);
+        }
+      });
+    });
+
+    // Init state
+    applyPaymentState("whatsapp");
+
+    orderForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      if (!cart.length) {
+        alert("Please add at least one product to your cart before ordering.");
+        document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+
+      const name = fields.name.value.trim();
+      const phone = fields.phone.value.trim();
+      const location = fields.location.value.trim();
+      const notes = document.getElementById("order-notes").value.trim();
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+      const lines = cart.map((i) => `• ${i.name} (${i.size}) x${i.qty} = ${fmtPrice(i.price * i.qty)}`);
+      const msg = [
+        "🛒 *New Order — Kaawa Mpologoma*",
+        "",
+        `*Name:* ${name}`,
+        `*Phone:* ${phone}`,
+        `*Delivery/Pickup:* ${location}`,
+        notes ? `*Notes:* ${notes}` : null,
+        "",
+        "*Items:*",
+        ...lines,
+        "",
+        `*Total: ${fmtPrice(total)}*`,
+      ]
+        .filter((l) => l !== null)
+        .join("\n");
+
+      const summaryEl = document.getElementById("form-summary");
+      const summaryItems = document.getElementById("form-summary-items");
+      const summaryTotal = document.getElementById("form-summary-total");
+      if (summaryEl) {
+        summaryItems.innerHTML = lines.map((l) => `<p>${l}</p>`).join("");
+        summaryTotal.textContent = fmtPrice(total);
+        summaryEl.hidden = false;
+      }
+
+      const successEl = document.getElementById("form-success");
+      if (successEl) successEl.hidden = false;
+
+      window.open("https://wa.me/256778253810?text=" + encodeURIComponent(msg), "_blank");
+    });
+  }
 }
