@@ -2784,3 +2784,38 @@ p {
 .map-embed iframe {
   display: block;
 }
+
+/* ── Floating Order Now button ── */
+.order-now-button {
+  position: fixed;
+  right: 1rem;
+  bottom: 5rem;
+  z-index: 35;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.9rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold) 0%, #d9a758 100%);
+  color: #fffaf1;
+  font-weight: 800;
+  box-shadow: 0 18px 36px rgba(188, 142, 61, 0.32);
+  text-decoration: none;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.order-now-button:hover,
+.order-now-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 40px rgba(188, 142, 61, 0.4);
+}
+
+.order-now-button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

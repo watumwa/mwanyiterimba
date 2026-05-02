@@ -617,6 +617,16 @@ if (document.querySelector(".shop-product-grid")) {
       if (successEl) successEl.hidden = false;
 
       window.open("https://wa.me/256778253810?text=" + encodeURIComponent(msg), "_blank");
+
+      // Reset form and hide success after 5s
+      setTimeout(() => {
+        if (successEl) successEl.hidden = true;
+        orderForm.reset();
+        cart.length = 0;
+        renderCart();
+        if (summaryEl) summaryEl.hidden = true;
+        applyPaymentState("whatsapp");
+      }, 5000);
     });
   }
 }
