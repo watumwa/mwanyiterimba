@@ -6,6 +6,12 @@
     <title>Shop | Mwanyi Terimba Ltd</title>
     <meta name="description" content="Order Kaawa Mpologoma coffee online. Choose your pack size and place an order for delivery or pickup at Katwe." />
     <meta name="theme-color" content="#2c180f" />
+    <meta property="og:title" content="Shop | Mwanyi Terimba Ltd" />
+    <meta property="og:description" content="Order Kaawa Mpologoma coffee online. Choose your pack size and place an order for delivery or pickup at Katwe." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="images/logo/mwanyiterimbalogo.jpg" />
+    <meta property="og:url" content="https://mwanyiterimba.com/shop.html" />
+    <link rel="icon" type="image/jpeg" href="images/logo/mwanyiterimbalogo.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -43,6 +49,7 @@
           <a href="gallery.html" data-nav="gallery">Gallery</a>
           <a href="outlets.html" data-nav="outlets">Sales Outlets</a>
           <a href="shop.html" data-nav="shop">Shop</a>
+          <a href="contact.html" data-nav="contact">Contact</a>
         </nav>
 
         <a class="button button-small button-solid nav-cta" href="#order-form">Order Now</a>
@@ -86,8 +93,8 @@
                 <h3>Kaawa Mpologoma</h3>
                 <p class="shop-desc">Freshly ground to your preferred texture — coarse or fine. Ready to brew.</p>
                 <div class="shop-sizes">
-                  <label class="shop-size-label">Pack size</label>
-                  <div class="shop-size-options" role="group" aria-label="Pack size">
+                  <span class="shop-size-label">Pack size</span>
+                  <div class="shop-size-options" role="group" aria-label="Pack size for Roasted Ground Coffee">
                     <button type="button" class="size-btn is-active" data-size="100g" data-price="8000">100g — UGX 8,000</button>
                     <button type="button" class="size-btn" data-size="250g" data-price="18000">250g — UGX 18,000</button>
                     <button type="button" class="size-btn" data-size="500g" data-price="32000">500g — UGX 32,000</button>
@@ -110,8 +117,8 @@
                 <h3>Kaawa Mpologoma</h3>
                 <p class="shop-desc">Whole roasted beans — light, medium, or dark roast. Grind fresh at home.</p>
                 <div class="shop-sizes">
-                  <label class="shop-size-label">Pack size</label>
-                  <div class="shop-size-options" role="group" aria-label="Pack size">
+                  <span class="shop-size-label">Pack size</span>
+                  <div class="shop-size-options" role="group" aria-label="Pack size for Roasted Coffee Beans">
                     <button type="button" class="size-btn is-active" data-size="250g" data-price="20000">250g — UGX 20,000</button>
                     <button type="button" class="size-btn" data-size="500g" data-price="36000">500g — UGX 36,000</button>
                     <button type="button" class="size-btn" data-size="1kg" data-price="65000">1kg — UGX 65,000</button>
@@ -133,8 +140,8 @@
                 <h3>Kaawa Mpologoma</h3>
                 <p class="shop-desc">Single-serve sachets — perfect for travel, gifting, or trying for the first time.</p>
                 <div class="shop-sizes">
-                  <label class="shop-size-label">Pack size</label>
-                  <div class="shop-size-options" role="group" aria-label="Pack size">
+                  <span class="shop-size-label">Pack size</span>
+                  <div class="shop-size-options" role="group" aria-label="Pack size for Sachet">
                     <button type="button" class="size-btn is-active" data-size="20g" data-price="2000">20g — UGX 2,000</button>
                     <button type="button" class="size-btn" data-size="50g" data-price="4500">50g — UGX 4,500</button>
                   </div>
@@ -217,8 +224,8 @@
               </p>
               <div class="payment-options" role="group" aria-label="Payment method">
 
-                <label class="payment-option">
-                  <input type="radio" name="payment" value="mtn" />
+                <label class="payment-option payment-option--disabled">
+                  <input type="radio" name="payment" value="mtn" disabled />
                   <span class="payment-option-card payment-option-card--mtn">
                     <span class="payment-card-top">
                       <span class="payment-icon payment-icon--mtn" aria-hidden="true">
@@ -227,15 +234,15 @@
                           <text x="50%" y="29" text-anchor="middle" font-size="13" font-weight="900" fill="#1a1a1a" font-family="Manrope,Arial,sans-serif">MTN</text>
                         </svg>
                       </span>
-                      <span class="payment-coming-soon">Coming Soon</span>
+                      <span class="payment-coming-soon">Not Available</span>
                     </span>
                     <span class="payment-option-name">MTN Mobile Money</span>
-                    <span class="payment-option-sub">Pay instantly with your MTN MoMo wallet</span>
+                    <span class="payment-option-sub">Coming soon — not yet available</span>
                   </span>
                 </label>
 
-                <label class="payment-option">
-                  <input type="radio" name="payment" value="airtel" />
+                <label class="payment-option payment-option--disabled">
+                  <input type="radio" name="payment" value="airtel" disabled />
                   <span class="payment-option-card payment-option-card--airtel">
                     <span class="payment-card-top">
                       <span class="payment-icon payment-icon--airtel" aria-hidden="true">
@@ -244,10 +251,10 @@
                           <text x="50%" y="29" text-anchor="middle" font-size="10" font-weight="900" fill="#fff" font-family="Manrope,Arial,sans-serif">AIRTEL</text>
                         </svg>
                       </span>
-                      <span class="payment-coming-soon">Coming Soon</span>
+                      <span class="payment-coming-soon">Not Available</span>
                     </span>
                     <span class="payment-option-name">Airtel Money</span>
-                    <span class="payment-option-sub">Pay instantly with your Airtel Money wallet</span>
+                    <span class="payment-option-sub">Coming soon — not yet available</span>
                   </span>
                 </label>
 
@@ -340,6 +347,8 @@
             <a href="tel:+256778253810"><span>Call Sales</span></a>
             <a href="https://wa.me/256778253810" target="_blank" rel="noreferrer"><span>WhatsApp</span></a>
             <a href="mailto:sales@mwanyiterimba.com?subject=Coffee%20Inquiry"><span>Email Sales</span></a>
+            <a href="https://www.facebook.com/mwanyiterimba" target="_blank" rel="noreferrer"><span>Facebook</span></a>
+            <a href="https://www.instagram.com/mwanyiterimba" target="_blank" rel="noreferrer"><span>Instagram</span></a>
           </div>
         </div>
       </div>
@@ -352,7 +361,7 @@
         <img src="images/gallery/kawampologomasacket.webp" alt="Coffee pack" loading="lazy" decoding="async" />
       </div>
       <div class="container footer-bottom">
-        <p>&copy; <span id="current-year">2026</span> Mwanyi Terimba Ltd</p>
+        <p>&copy; <span id="current-year">2026</span> Mwanyi Terimba Ltd · <a href="privacy.html" style="opacity:0.7;">Privacy Policy</a></p>
         <p class="footer-powered">Powered By OBasil</p>
       </div>
     </footer>
