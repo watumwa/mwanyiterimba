@@ -343,8 +343,7 @@ p {
   z-index: -2;
   background:
     linear-gradient(120deg, rgba(22, 11, 8, 0.82), rgba(44, 24, 15, 0.7) 45%, rgba(74, 40, 21, 0.52)),
-    url("images/gallery/coffeebeans2.webp") center/cover no-repeat;
-  transform: scale(1.08);
+    url("images/dry coofee beans.jpg") center/cover no-repeat;
   filter: saturate(0.9);
 }
 
@@ -1195,13 +1194,13 @@ p {
 .page-hero--gallery .page-hero-backdrop {
   background:
     linear-gradient(120deg, rgba(22, 11, 8, 0.84), rgba(44, 24, 15, 0.72)),
-    url("images/gallery/kawampologomasacket.webp") center/cover no-repeat;
+    url("images/readyfor harvest.jpg") center/cover no-repeat;
 }
 
 .page-hero--outlets .page-hero-backdrop {
   background:
     linear-gradient(120deg, rgba(22, 11, 8, 0.86), rgba(44, 24, 15, 0.74)),
-    url("images/gallery/kawampologoma.jpg") center/cover no-repeat;
+    url("images/dry coofee beans.jpg") center/cover no-repeat;
 }
 
 .page-hero-shell {
